@@ -16,8 +16,13 @@ router.get("/:id",checkAccountId, async (req, res, next) => {
   res.status(200).json(req.accountFromDb);
 });
 
-router.post("/", (req, res, next) => {
-  // DO YOUR MAGIC
+router.post("/", async (req, res, next) => {
+  try {
+    const newAcc = await Account.create(req.body)
+    res.status(201).json(newAcc)
+  } catch(err){
+    next(err)
+  }
 });
 
 router.put("/:id", (req, res, next) => {
