@@ -20,7 +20,15 @@ exports.checkAccountPayload = (req, res, next) => {
   }
 };
 
-exports.checkAccountNameUnique = (req, res, next) => {};
+exports.checkAccountNameUnique = async (req, res, next) => {
+  try {
+    const accounts = await Account.getAll()
+    const exists = accounts.find(acc => acc.name === req.body.name)
+    !exists ? next() : next({status: 400, message: "that name is taken"})
+  } catch(err){
+    next(err)
+  }
+};
 
 exports.checkAccountId = async (req, res, next) => {
   try {
